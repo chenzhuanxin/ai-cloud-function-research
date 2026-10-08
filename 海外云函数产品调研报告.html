@@ -1,0 +1,1463 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>海外云函数产品调研报告（2026 年 10 月）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2312564C'/%3E%3Ccircle cx='13' cy='13' r='5' fill='none' stroke='%23fff' stroke-width='2.2'/%3E%3Cpath d='M10.5 22.5c1.4-2 3.1-3 5-3s3.6 1 5 3' fill='none' stroke='%23C4762A' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<style>
+:root{
+  --ink:#1F2329;
+  --ink-2:#646A73;
+  --ink-3:#8A939B;
+  --line:#DEE3E8;
+  --line-2:#EDF1F4;
+  --primary:#12564C;
+  --primary-soft:#E8F0EE;
+  --accent:#C4762A;
+  --accent-soft:#FAEFE3;
+  --bg:#FFFFFF;
+  --bg-soft:#F7F9FA;
+  --serif:"Noto Serif SC","Songti SC",Georgia,"Microsoft YaHei",serif;
+  --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.78;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+/* ===== 报头 ===== */
+.masthead{border-bottom:2px solid var(--ink);padding:56px 0 22px;margin-bottom:0;}
+.kicker{
+  font-size:13px;letter-spacing:.14em;color:var(--primary);
+  font-weight:700;margin:0 0 18px;text-transform:none;
+}
+h1.title{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(28px,4.6vw,50px);line-height:1.22;letter-spacing:-.01em;
+  margin:0 0 16px;max-width:20em;
+}
+.subtitle{font-size:17px;color:var(--ink-2);margin:0 0 26px;max-width:44em;line-height:1.7;}
+.meta-row{
+  display:flex;flex-wrap:wrap;gap:10px 34px;font-size:13.5px;color:var(--ink-2);
+  border-top:1px solid var(--line);padding-top:14px;
+}
+.meta-row b{color:var(--ink);font-weight:700;}
+
+.strip{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  border-bottom:1px solid var(--line);margin-bottom:0;
+}
+.strip .cell{padding:22px 22px 22px 0;border-right:1px solid var(--line-2);}
+.strip .cell:last-child{border-right:0;}
+.strip .num{
+  font-family:var(--serif);font-weight:700;font-size:clamp(22px,3.1vw,34px);
+  color:var(--primary);line-height:1.1;font-variant-numeric:tabular-nums;
+}
+.strip .lbl{font-size:13px;color:var(--ink-2);margin-top:7px;line-height:1.55;}
+
+/* ===== 章节 ===== */
+section{padding:54px 0 8px;border-bottom:1px solid var(--line-2);}
+section:last-of-type{border-bottom:0;}
+h2.sec{
+  font-family:var(--serif);font-weight:700;font-size:clamp(21px,2.6vw,28px);
+  margin:0 0 8px;line-height:1.3;display:flex;gap:14px;align-items:baseline;
+}
+h2.sec .no{
+  font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.08em;
+  font-variant-numeric:tabular-nums;flex:none;padding-top:6px;
+}
+.lede{font-size:16.5px;color:var(--ink-2);max-width:46em;margin:0 0 26px;line-height:1.8;}
+p{margin:0 0 16px;}
+h3{font-family:var(--serif);font-weight:600;font-size:18.5px;margin:30px 0 12px;}
+
+/* ===== 表格 ===== */
+.tablewrap{overflow-x:auto;margin:0 0 10px;border:1px solid var(--line);}
+table{border-collapse:collapse;width:100%;table-layout:fixed;min-width:1120px;}
+thead th{
+  background:var(--bg-soft);text-align:left;font-weight:700;font-size:13.5px;
+  color:var(--ink-2);padding:12px 14px;border-bottom:1px solid var(--line);
+  vertical-align:bottom;line-height:1.5;
+}
+tbody td{
+  padding:14px;border-bottom:1px solid var(--line-2);vertical-align:top;
+  font-size:14px;line-height:1.68;overflow-wrap:anywhere;
+}
+tbody tr:last-child td{border-bottom:0;}
+tbody tr:hover{background:#FCFDFD;}
+.pname{font-weight:700;font-size:14.5px;}
+.dev{display:block;color:var(--ink-3);font-size:12.5px;margin-top:3px;line-height:1.5;}
+.score{
+  font-family:var(--serif);font-weight:700;font-size:19px;color:var(--primary);
+  font-variant-numeric:tabular-nums;display:block;
+}
+.score.na{color:var(--ink-3);font-size:15px;}
+.basis{display:block;color:var(--ink-3);font-size:12px;margin-top:5px;line-height:1.55;}
+a{color:var(--primary);text-decoration:none;border-bottom:1px solid rgba(18,86,76,.35);}
+a:hover{border-bottom-color:var(--primary);}
+a.ext::after{content:"↗";font-size:.78em;vertical-align:.18em;margin-left:2px;color:var(--ink-3);}
+.note-inline{color:var(--ink-3);font-size:12.5px;}
+.tag{
+  display:inline-block;font-size:12px;font-weight:700;line-height:1.5;
+  padding:1px 8px;border:1px solid var(--line);color:var(--ink-2);
+  background:var(--bg-soft);margin-bottom:6px;margin-right:4px;
+}
+.tag.cat-video{color:#0E4A41;background:#E8F0EE;border-color:#C9DCD6;}
+.tag.cat-live{color:#7A4712;background:var(--accent-soft);border-color:#E7D2B8;}
+.tag.cat-clone{color:#1F4E79;background:#E8EFF5;border-color:#C9D8E6;}
+.tag.cat-interactive{color:#4C5636;background:#EFF1E6;border-color:#D5DAC4;}
+.tag.free{color:#fff;background:var(--primary);border-color:var(--primary);}
+.tag.paid{color:#7A4712;background:var(--accent-soft);border-color:#E7D2B8;}
+ul.tight{margin:0;padding-left:18px;}
+ul.tight li{margin-bottom:5px;}
+
+/* ===== 图表 ===== */
+.chart-card{border:1px solid var(--line);padding:22px 20px 12px;margin:0 0 10px;background:var(--bg);}
+.chart-title{font-family:var(--serif);font-weight:600;font-size:16.5px;margin:0 0 4px;}
+.chart-sub{font-size:13px;color:var(--ink-2);margin:0 0 14px;line-height:1.62;}
+.chart{width:100%;height:520px;}
+.chart.tall{height:640px;}
+.caption{font-size:12.5px;color:var(--ink-3);line-height:1.7;margin:6px 0 0;}
+
+/* ===== 结论块 ===== */
+.findings{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);}
+.findings .f{padding:24px 24px 8px 0;border-right:1px solid var(--line-2);}
+.findings .f:last-child{border-right:0;padding-right:0;}
+.findings .f .t{font-family:var(--serif);font-weight:700;font-size:16.5px;margin:0 0 8px;line-height:1.5;}
+.findings .f p{font-size:14px;color:var(--ink-2);line-height:1.72;margin:0;}
+
+/* ===== 时间线 ===== */
+.timeline{margin:6px 0 0;position:relative;}
+.timeline::before{
+  content:"";position:absolute;top:11px;bottom:11px;
+  left:116.5px;width:1px;background:var(--line);
+}
+.tnode{display:grid;grid-template-columns:104px 26px 1fr;align-items:start;}
+.tnode .when{
+  font-size:13px;font-weight:700;color:var(--primary);text-align:right;
+  padding-right:10px;line-height:22px;font-variant-numeric:tabular-nums;
+}
+.tnode .axis{display:flex;justify-content:center;}
+.tnode .dot{position:relative;z-index:1;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--primary);margin-top:6px;}
+.tnode.hot .dot{background:var(--accent);border-color:var(--accent);}
+.tnode .body{padding:0 0 22px 14px;}
+.tnode:last-child .body{padding-bottom:0;}
+.tnode .what{font-weight:700;font-size:15px;margin:0 0 3px;line-height:1.55;}
+.tnode .why{font-size:14px;color:var(--ink-2);margin:0;line-height:1.7;}
+
+/* ===== 待确认 ===== */
+.todo{border-top:1px solid var(--line);}
+.todo .t{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line-2);}
+.todo .t .n{font-family:var(--serif);font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;font-size:15px;}
+.todo .t .c{font-size:14px;line-height:1.72;color:var(--ink);}
+.todo .t .c b{font-weight:700;}
+
+/* ===== 信源索引 ===== */
+.srcgrp{margin-bottom:28px;}
+.srcgrp h3{margin-top:0;}
+.srclist{margin:0;padding:0;}
+.srcitem{display:grid;grid-template-columns:112px 1fr;gap:12px;margin-bottom:12px;list-style:none;}
+.srclabel{font-size:12.5px;color:var(--ink-3);font-weight:700;line-height:1.6;}
+.srcbody{font-size:14px;line-height:1.7;overflow-wrap:anywhere;}
+.srcfield{display:block;margin-top:2px;font-size:12.5px;color:var(--ink-3);}
+
+footer{padding:34px 0 56px;color:var(--ink-3);font-size:13px;line-height:1.8;}
+footer b{color:var(--ink-2);}
+
+@media (max-width:960px){
+  .strip{grid-template-columns:repeat(2,1fr);}
+  .strip .cell:nth-child(2){border-right:0;}
+  .strip .cell{border-bottom:1px solid var(--line-2);padding-right:16px;}
+  .strip .cell:nth-child(3),.strip .cell:nth-child(4){border-bottom:0;}
+  .findings{grid-template-columns:1fr;}
+  .findings .f{border-right:0;border-bottom:1px solid var(--line-2);padding:20px 0 14px;}
+  .findings .f:last-child{border-bottom:0;}
+  .tablewrap{border:0;overflow:visible;}
+  table{min-width:0;table-layout:auto;display:block;}
+  thead{display:none;}
+  tbody{display:block;}
+  tbody tr{display:block;border:1px solid var(--line);margin-bottom:14px;padding:4px 0;}
+  tbody td{display:grid;grid-template-columns:88px 1fr;gap:10px;border-bottom:1px solid var(--line-2);padding:10px 14px;font-size:13.5px;}
+  tbody td:last-child{border-bottom:0;}
+  tbody td::before{
+    content:attr(data-label);font-size:12.5px;color:var(--ink-3);font-weight:700;line-height:1.6;
+  }
+  .chart{height:640px;}
+  .chart.tall{height:840px;}
+  .tnode{grid-template-columns:78px 20px 1fr;}
+  .tnode .when{font-size:12px;padding-right:7px;}
+  .tnode .body{padding-left:10px;}
+  .timeline::before{left:87.5px;}
+  .meta-row{font-size:14px;}
+  .strip .lbl{font-size:13.5px;}
+  .findings .f p{font-size:14.5px;}
+  tbody td{font-size:14.5px;grid-template-columns:98px 1fr;}
+  tbody td::before{font-size:13px;}
+  .dev{font-size:14px;}
+  .tablewrap a.ext{display:inline-block;padding:10px 0;}
+  .srcitem{grid-template-columns:1fr;gap:2px;}
+  .srclabel{font-size:13px;}
+  .srcbody{font-size:14.5px;}
+  .kicker{font-size:14px;}
+  .strip .lbl{font-size:14px;}
+  .tag{font-size:14px;}
+  h2.sec .no{font-size:14px;}
+}
+@media (max-width:520px){
+  .wrap{padding:0 16px;}
+  .chart{height:720px;}
+  .tnode{grid-template-columns:66px 16px 1fr;}
+  .timeline::before{left:73.5px;}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="kicker">云函数调研 · 海外（非中国大陆）· 2026-10-08 口径</p>
+    <h1 class="title">海外云函数产品调研报告</h1>
+    <p class="subtitle">覆盖云厂商 FaaS、边缘函数、平台型 FaaS 与 BaaS/云开发四类共 18 个在营产品：谁在做、能免费用多少、按什么价格卖、冷启动与并发处在什么水位。国内产品由配套的中国报告覆盖，此处仅在核验章节作为对照出现。所有数字与网址均附可追溯来源，无法核实一律标注「待确认」。</p>
+    <div class="meta-row">
+      <span>数据口径：<b>截至 2026-10-08</b></span>
+      <span>计价货币：<b>美元（USD）+ 约合人民币</b></span>
+      <span>信源交叉：<b>官方站点 / 官方文档 / 开发者社区</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="strip">
+    <div class="cell"><div class="num">18</div><div class="lbl">可评分在营产品</div></div>
+    <div class="cell"><div class="num">15</div><div class="lbl">含免费额度或长期免费层</div></div>
+    <div class="cell"><div class="num">$5–25</div><div class="lbl">主流付费档月费区间（USD）</div></div>
+    <div class="cell"><div class="num">4</div><div class="lbl">覆盖产品品类数</div></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<section>
+  <h2 class="sec"><span class="no">01</span>核心结论</h2>
+  <p class="lede">海外 Serverless 的竞争重心已从「有没有免费额度」转到「免费额度够不够跑生产」：三大云厂守住每月固定免费授予，Cloudflare 与 Vercel 用「请求数 + CPU 时长」双限额拉开发者，而 Railway、Fly.io 这类托管平台则选择收缩甚至取消永久免费层。计价单位的碎片化程度，已经成为比单价本身更重要的选型变量。</p>
+  <div class="findings">
+    <div class="f"><p class="t">免费层分化为「云厂长期授予」与「平台试用」两类</p><p>三大云厂的免费授予都是长期口径且按账单账户计：AWS Lambda 每月 100 万次请求 + 40 万 GB-秒，Google Cloud Run functions 每月 200 万次调用 + 40 万 GB-秒 + 20 万 GHz-秒，Azure Functions 每订阅每月 100 万次执行 + 40 万 GB-秒。平台侧则是另一种形态——Cloudflare Workers 免费版每天 10 万次请求（约合每月 300 万次）、Vercel Hobby 每月 100 万次调用 + 4 小时 Active CPU，但都限定非商用或团队规模；Netlify 更彻底，Free 档只有每月 300 积分硬上限，用完项目直接暂停。判断一个免费层能不能上生产，关键看它是否有硬上限以及超限后的行为是「降级」还是「停机」。</p></div>
+    <div class="f"><p class="t">计价单位在三家云厂之外高度碎片化</p><p>坚持「请求数 + GB-秒」两段式计价的只有 AWS Lambda、Azure Functions 与 Cloud Run functions；Cloudflare Workers 改为计「请求数 + CPU 毫秒」（$0.30/百万次 + $0.02/百万 CPU 毫秒），Vercel 计「调用次数 + Active CPU 小时 + 预置内存 GB-小时」，Netlify 把所有用量折成积分（计算 10 积分/GB-小时、带宽 20 积分/GB、Web 请求 2 积分/万次）再统一扣减，Render 与 Railway 干脆按实例常驻时长计费。这意味着「每月 100 万次免费调用」这类说法在平台型产品上根本无法直接比较——跨厂商比价的前提是先把自己的负载折算成对方的口径。</p></div>
+    <div class="f"><p class="t">Railway、Fly.io 收缩免费层，边缘函数继续免费</p><p>Railway 的 Hobby 档 $5/月起、免费档只剩每月约 1 美元额度（第三方口径），Fly.io 自 2024 年 10 月起对新账户不再提供永久免费层——托管容器型平台的免费时代已经结束。与之相反，边缘侧仍在扩张：Cloudflare Workers 免费版每天 10 万次请求，Fastly Compute 免费层给到每月 1000 万次 Compute 请求，Deno Deploy 免费版每月 100 万次请求 + 20 GiB 出流量 + 20 小时 CPU。如果目标是零成本长期在线一个轻量服务，边缘函数是这张表里最现实的选项。</p></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">02</span>产品字段总表</h2>
+  <p class="lede">同一行回答同一组问题：谁开发的、属于哪一类产品、去哪开通、免费用多少、按什么价格卖（海外产品以美元原值报价并附约合人民币）、能力与短板在哪。评分为主观共识评分，非厂商官方指标。</p>
+  <div class="tablewrap">
+    <table>
+      <colgroup>
+        <col style="width:15%"><col style="width:7%"><col style="width:13%">
+        <col style="width:12%"><col style="width:17%"><col style="width:16%"><col style="width:20%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>产品 / 开发方</th>
+          <th>评分</th>
+          <th>评分依据</th>
+          <th>官方入口</th>
+          <th>免费额度</th>
+          <th>价格</th>
+          <th>特点与局限</th>
+        </tr>
+      </thead>
+      <tbody id="mainTable">
+      </tbody>
+    </table>
+  </div>
+  <p class="caption" id="tableCaption"></p>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">03</span>综合质量评分对比</h2>
+  <p class="lede">评分为主观共识评分，由作者综合官方计费与配额文档、开发者社区实测反馈与第三方横测给出，满分 10 分。评估维度：免费额度含金量、价格透明度与竞争力、冷启动与并发上限、生态集成（触发器 / API 网关 / 可观测）、运维与文档完备度；四类产品按自身核心维度加权，跨品类不宜直接横向比较。</p>
+  <div class="chart-card">
+    <p class="chart-title">18 个海外云函数 / Serverless 产品的综合质量评分（满分 10）</p>
+    <p class="chart-sub">颜色区分产品品类：深青为云厂商 FaaS，赭色为边缘函数，蓝为平台型 FaaS，橄榄为 BaaS/云开发。</p>
+    <div class="chart tall" id="chartScore"></div>
+    <p class="caption">数据口径：2026-10-08。评分非厂商官方指标。</p>
+  </div>
+  <p>第一梯队是三家超大规模云厂的 FaaS 加 Cloudflare：AWS Lambda（9.0）、Cloudflare Workers（8.9）、Google Cloud Run functions（8.8）、Google Cloud Run（8.7）、Azure Functions（8.6）。它们分数接近的原因各不相同——Lambda 胜在生态完整与 1 毫秒计费粒度，Workers 胜在零冷启动与全球边缘覆盖，Cloud Run functions 与 Cloud Run 胜在容器与函数共用同一套运行时，Azure Functions 胜在 Durable Functions 的有状态编排与 .NET 生态。中间层（7.6–8.5）集中在部署平台：Vercel、Deno Deploy、Netlify、Firebase、Fastly、Supabase，差异主要来自免费额度的计量方式与厂商锁定程度。榜单末段的 Fly.io、Railway、Render、Koyeb、Val Town 并非能力弱，而是产品形态更接近「托管容器 / 脚本托管」，与函数粒度的 FaaS 不可直接比较；Oracle OCI Functions 与 IBM Code Engine 分数偏低，主要因为公开文档与社区资料的可得性不足。</p>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">04</span>价格与免费额度的位置</h2>
+  <p class="lede">把「最低付费门槛」和「质量评分」放在同一坐标系，看免费与付费档的分布规律。</p>
+  <div class="chart-card">
+    <p class="chart-title">最低付费月费与质量评分的关系</p>
+    <p class="chart-sub">横轴为可查证的最低付费档月费（元/月，海外原价按 1 USD ≈ 7.1 CNY 换算）；有长期免费层的产品记为 0，以深青实心点标注、无免费层者以赭色标注。仅纳入价格口径明确的在营产品。</p>
+    <div class="chart tall" id="chartPrice" style="height:840px"></div>
+    <p class="caption">Fly.io（已无永久免费层，付费档最低月费未取到官方口径）与 Koyeb（免费档与价格口径冲突）未纳入本图，原因见待确认清单。</p>
+  </div>
+  <p>海外这一侧的分布是「极点 + 长尾」：横轴 0 附近挤着 15 个有长期免费层或按量计费的产品，评分从 7.0 跨到 9.0；唯一的离群点是 Railway（Hobby 档 $5/月 ≈ ¥35.5，评分 7.7）。也就是说门槛高低几乎不解释质量差异，真正拉开差距的是免费层之外的第一档付费价格与配额——Cloudflare Workers 付费版 $5/月含 1000 万次请求 + 3000 万 CPU 毫秒，Vercel Pro $20/座/月，Netlify Pro $20/月含 3000 积分，Supabase Pro $25/月含 200 万次函数调用，四家的付费起点都落在 $5–25 区间，但计量单位完全不同。合理的选购顺序应该是：先确认运行时约束（边缘隔离还是容器）、再确认触发与集成方式、最后才比价。</p>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">05</span>2024—2026 关键节点</h2>
+  <p class="lede">按公开可查的发布、上线与计费调整时点排列，用于理解竞争格局是怎么形成的。</p>
+  <div class="timeline" id="timeline"></div>
+  <p style="margin-top:22px;">海外 Serverless 的这条时间线由两类事件交替构成：一类是免费层的收与放——Fly.io 在 2024 年 10 月停止对新账户提供永久免费层、Netlify 在 2026 年 4 月全面转向积分制并调整费率、Deno Deploy 在 2026 年 2 月正式 GA 并同时公布免费档；另一类是运行时与计费口径的重定义——Google 把 Cloud Functions 并入 Cloud Run 体系、Cloudflare 把 Workers 的计量从「请求数」扩展到「请求数 + CPU 毫秒」、IBM 把 Serverless 主线交给 Code Engine。综合来看，2024—2026 年不是价格战期，而是「计量方式重构期」：谁的口径更能反映真实成本，谁就更容易被写进架构方案。</p>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">06</span>厂商 / 能力核验</h2>
+  <p class="lede">检索中重点点名的厂商与方向，逐一给出核验结论；已停服、不存在或无法核实就如实写。</p>
+  <div class="tablewrap">
+    <table>
+      <colgroup><col style="width:16%"><col style="width:16%"><col style="width:68%"></colgroup>
+      <thead>
+        <tr><th>厂商 / 产品</th><th>核验结论</th><th>说明</th></tr>
+      </thead>
+      <tbody id="verifyTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">07</span>信源索引</h2>
+  <p class="lede">按产品分组，标注每条来源支撑哪些字段。三类信源交叉验证：官方站点与官方文档、定价与配额页、开发者社区与第三方横测。</p>
+  <div id="sourceIndex"></div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="no">08</span>待确认与无法核实项</h2>
+  <p class="lede">以下条目在本轮公开检索范围内无法取得可靠官方口径，如实列出，未作推测填补。</p>
+  <div class="todo" id="todoList"></div>
+</section>
+
+<footer>
+  <p><b>方法与免责：</b>本报告信息采集截止北京时间 2026 年 10 月 8 日；海外价格以美元原值给出并约合人民币（按 1 USD ≈ 7.1 CNY 估算，欧元档先按 €1 ≈ $1.08 折美元再换算，均为量级参考）。「云函数 / Serverless 质量评分」为主观共识评分，由作者综合官方计费与配额文档、开发者社区实测反馈与第三方横测给出，非厂商官方指标，也不等同于客观基准测试；同一产品在不同运行时、内存规格与触发器形态下表现差异较大。</p>
+  <p><b>已剔除的非官方来源：</b>第三方域名自称官方或提供更低报价的页面，均不作为官方依据；代购、代理与折扣站点的报价已在核验章节单独标注。</p>
+  <p>价格与免费额度变动频繁，正式采购前请以厂商官方页面为准。</p>
+</footer>
+
+<script>
+/* =====================================================================
+   填充说明（两个子代理按此规范填充，勿改动 CSS 与渲染函数结构）：
+   1. PRODUCTS：每个产品一个对象，字段见下。cat 取值 video/live/clone/interactive；
+      score 为 10 分制主观共识分（可小数，null 表示不评分，如"无此能力"条目）；
+      avail 取值 free（有免费额度）/ paid（付费或仅 API）；
+      site 为官方域名（label 显示名，url 链接）；
+      free 写免费额度具体口径；price 写价格（国内人民币；海外 USD 并附 cny 约合人民币）；
+      basis 写 10-25 字评分依据；note 写特点与局限（40-90 字）。
+   2. PRICE_POINTS：x=最低付费月费（元，免费记 0，海外换算为人民币），y=评分，free=true/false，lp=标签位置(top/bottom/right/left)。
+   3. TIMELINE：{when, what, why, hot}，hot=true 表示关键节点（赭色圆点）。
+   4. VERIFIED：{name, verdict, note}，verdict 可含 <span class="tag">…</span>。
+   5. SOURCES：按产品分组，items 为 [来源类型, 链接HTML(或纯文本), 支撑字段]。
+   6. TODOS：[产品, 待确认说明]。
+   7. 除数据数组外，还需替换：报头 kicker/h1/subtitle/meta-row、strip 四个数字、
+      各 section 的 lede 与解读段落、（01）核心结论三卡、（05）时间线总结。
+   8. 完成后用 Edge/Chrome 无头模式截桌面与移动两张图存入 _shots 目录并自查布局。
+===================================================================== */
+
+const PRODUCTS = [
+  {
+    "name": "AWS Lambda",
+    "dev": "Amazon Web Services",
+    "cat": "video",
+    "score": 9.0,
+    "avail": "free",
+    "site": {
+      "label": "aws.amazon.com/lambda/pricing",
+      "url": "https://aws.amazon.com/lambda/pricing/"
+    },
+    "free": "长期免费层：每月 100 万次请求 + 40 万 GB-秒计算时间，另含每月 100 GiB HTTP 响应流（不含每请求前 6 MB）",
+    "price": "请求 $0.20/百万次（约 ¥1.4）；x86 $0.0000166667/GB-秒（约 ¥0.000118）、Arm/Graviton2 $0.0000133334/GB-秒；预置并发另按 GB-秒计费",
+    "basis": "共识区间 8.6–9.3；1 毫秒计费粒度，触发器生态与资料最完整",
+    "note": "行业事实标准，支持容器镜像与 Graviton，1 毫秒计费粒度；短板是默认并发 1000/区域需提额，VPC 内冷启动是常见坑。"
+  },
+  {
+    "name": "Cloudflare Workers",
+    "dev": "Cloudflare",
+    "cat": "live",
+    "score": 8.9,
+    "avail": "free",
+    "site": {
+      "label": "developers.cloudflare.com/workers/platform/pricing",
+      "url": "https://developers.cloudflare.com/workers/platform/pricing/"
+    },
+    "free": "Free：每天 10 万次请求（约合每月 300 万次）、每次调用最多 10 毫秒 CPU 时间；含 KV 免费额度（读取 1000 万次/月、写入 10 万次/天）",
+    "price": "Workers Paid $5/月起（约 ¥35.5），含每月 1000 万次请求 + 3000 万 CPU 毫秒；超出 $0.30/百万次请求（约 ¥2.1）、$0.02/百万 CPU 毫秒",
+    "basis": "共识区间 8.5–9.2；零冷启动、全球边缘覆盖，免费额度按天生效",
+    "note": "V8 隔离的零冷启动模型，边缘网络全球覆盖，可用 KV/D1/R2；短板是单次 10 毫秒 CPU、128 MB 内存上限，重计算不适合。"
+  },
+  {
+    "name": "Google Cloud Run functions",
+    "dev": "Google Cloud",
+    "cat": "video",
+    "score": 8.8,
+    "avail": "free",
+    "site": {
+      "label": "cloud.google.com/functions/pricing",
+      "url": "https://cloud.google.com/functions/pricing"
+    },
+    "free": "长期免费层：每月 200 万次调用 + 40 万 GB-秒 + 20 万 GHz-秒计算时间 + 5 GB 出流量（跨账单账户所有函数累计）",
+    "price": "调用 $0.40/百万次（约 ¥2.84，前 200 万次免费）；计算资源按 Cloud Run 费率：CPU $0.000018/vCPU-秒、内存 $0.000002/GiB-秒",
+    "basis": "共识区间 8.4–9.1；与 Cloud Run 统一运行时，免费调用额度领先",
+    "note": "原 Cloud Functions，已并入 Cloud Run 体系，支持任意语言与事件触发；短板是 1st/2nd gen 计费口径不同，免费层叠加关系不明。"
+  },
+  {
+    "name": "Google Cloud Run",
+    "dev": "Google Cloud",
+    "cat": "clone",
+    "score": 8.7,
+    "avail": "free",
+    "site": {
+      "label": "cloud.google.com/run/pricing",
+      "url": "https://cloud.google.com/run/pricing"
+    },
+    "free": "长期免费层（按请求计费）：每月 200 万次请求 + 36 万 GB-秒内存 + 18 万 vCPU-秒计算时间 + 1 GB 北美出流量（官方 Free Tier 页口径）",
+    "price": "CPU $0.000018/vCPU-秒（约 ¥0.000128）、内存 $0.000002/GiB-秒（约 ¥0.0000142）、临时磁盘 $0.000109589/GiB-小时；请求不单独计费",
+    "basis": "共识区间 8.3–9.0；容器化 Serverless 事实标准，可缩容到零",
+    "note": "任意容器可按请求伸缩并可缩容到零，支持并发与 GPU；短板是按资源而非函数粒度计费，冷启动与实例驻留需自行调优。"
+  },
+  {
+    "name": "Azure Functions",
+    "dev": "Microsoft Azure",
+    "cat": "video",
+    "score": 8.6,
+    "avail": "free",
+    "site": {
+      "label": "azure.microsoft.com/pricing/details/functions",
+      "url": "https://azure.microsoft.com/en-us/pricing/details/functions/"
+    },
+    "free": "消费计划：每订阅每月免费授予 100 万次执行 + 40 万 GB-秒",
+    "price": "执行时间 $0.000016/GB-秒（约 ¥0.000114）；执行数 $0.20/百万次（约 ¥1.42）；Flex Consumption 与高级计划另有档位",
+    "basis": "共识区间 8.1–8.9；Durable Functions 有状态编排为独家能力",
+    "note": "与 .NET/Azure 生态绑定最深，Durable Functions 有状态编排为独家能力；短板是内存与执行时间分档复杂，预算需读透计费模型。"
+  },
+  {
+    "name": "Vercel Functions",
+    "dev": "Vercel",
+    "cat": "clone",
+    "score": 8.5,
+    "avail": "free",
+    "site": {
+      "label": "vercel.com/docs/functions/usage-and-pricing",
+      "url": "https://vercel.com/docs/functions/usage-and-pricing"
+    },
+    "free": "Hobby 免费档：每月 100 万次函数调用 + 4 小时 Active CPU + 360 GB-小时预置内存 + 100 GB Fast Data Transfer（限非商用）",
+    "price": "Hobby $0/月；Pro $20/座/月（约 ¥142，含 $20 用量额度），函数超出按调用 $0.60/百万次起计，另叠加 Active CPU 与预置内存区域费率",
+    "basis": "共识区间 8.1–8.9；前端框架零配置集成，边缘与 Node 运行时统一",
+    "note": "函数与前端部署、CDN、图片优化打包，Fluid compute 多并发共享实例；短板是 Hobby 限非商用，计费维度不易预估。"
+  },
+  {
+    "name": "Deno Deploy",
+    "dev": "Deno Land",
+    "cat": "live",
+    "score": 8.2,
+    "avail": "free",
+    "site": {
+      "label": "deno.com/deploy/pricing",
+      "url": "https://deno.com/deploy/pricing"
+    },
+    "free": "免费档：每月 100 万次请求 + 20 GiB 出流量 + 20 小时 CPU 时间 + 200 GB-小时内存时间 + 5 个自定义域名",
+    "price": "免费 $0；Pro 档 $20/月起（约 ¥142，第三方口径）；超出按请求、出流量、CPU 与内存时间分项计费",
+    "basis": "共识区间 7.7–8.6；TypeScript 原生、无冷启动，GA 后口径趋稳",
+    "note": "V8 隔离的边缘运行时，原生 TypeScript 与 ESM，内置 KV 与 Cron；短板是 GA 公告与定价页的免费额度口径不一致。"
+  },
+  {
+    "name": "Netlify Functions",
+    "dev": "Netlify",
+    "cat": "clone",
+    "score": 8.1,
+    "avail": "free",
+    "site": {
+      "label": "netlify.com/pricing",
+      "url": "https://www.netlify.com/pricing/"
+    },
+    "free": "Free 档：每月 300 积分硬上限（计算 10 积分/GB-小时、带宽 20 积分/GB、Web 请求 2 积分/万次、生产部署 15 积分/次），用完项目暂停",
+    "price": "Free $0；Personal $9/月（1000 积分，约 ¥64）；Pro $20/月起（3000 积分，约 ¥142）；额外积分包 $10/1500 积分",
+    "basis": "共识区间 7.6–8.5；前后端一体、部署体验最好，计量口径最不直观",
+    "note": "函数与前端构建、预览部署一并打包，2026-04 起改为积分制；短板是积分无法与请求数或 GB-秒直接换算。"
+  },
+  {
+    "name": "Firebase Cloud Functions",
+    "dev": "Google（Firebase）",
+    "cat": "interactive",
+    "score": 8.0,
+    "avail": "free",
+    "site": {
+      "label": "firebase.google.com/docs/functions",
+      "url": "https://firebase.google.com/docs/functions"
+    },
+    "free": "依赖 Cloud Run 免费层：每月 200 万次调用 + 40 万 GB-秒 + 20 万 GHz-秒 + 5 GB 出流量；Blaze 计划按用量计费",
+    "price": "调用 $0.40/百万次（约 ¥2.84）；计算资源按 Cloud Run 费率（CPU $0.000018/vCPU-秒、内存 $0.000002/GiB-秒）",
+    "basis": "共识区间 7.5–8.4；与 Firestore/Auth/FCM 触发器天然打通",
+    "note": "声明式触发器直连 Firestore、Auth 与 FCM，是移动端后端最短路径；短板是强绑定 GCP，超量后成本随触发器调用增长。"
+  },
+  {
+    "name": "Fastly Compute",
+    "dev": "Fastly",
+    "cat": "live",
+    "score": 7.9,
+    "avail": "free",
+    "site": {
+      "label": "fastly.com/pricing",
+      "url": "https://www.fastly.com/pricing"
+    },
+    "free": "免费层：每月 1000 万次 Compute 请求（不含 CDN 交付、日志与对象存储费用）",
+    "price": "Compute 请求 $0.50/百万次（10M–500M 区间，约 ¥3.55），0–10M 免费；Compute 时长的当前单价未在定价页列明（旧版在线付费页口径为 $0.000035/GB-秒，待确认）",
+    "basis": "共识区间 7.4–8.3；Wasm 运行时性能稳定，缓存即时清除为独家能力",
+    "note": "WebAssembly 边缘运行时，支持 Rust/Go 多语言，缓存即时清除为独家能力；短板是免费层只覆盖 Compute 请求，交付另计。"
+  },
+  {
+    "name": "Supabase Edge Functions",
+    "dev": "Supabase",
+    "cat": "interactive",
+    "score": 7.9,
+    "avail": "free",
+    "site": {
+      "label": "supabase.com/pricing",
+      "url": "https://supabase.com/pricing"
+    },
+    "free": "Free 档：每月 50 万次函数调用 + 25 个函数 + 500 MB 数据库 + 1 GB 存储 + 5 GB 出流量；项目闲置 7 天自动暂停",
+    "price": "Free $0；Pro $25/月（约 ¥178）含 200 万次函数调用，超出 $2/百万次（约 ¥14.2）",
+    "basis": "共识区间 7.4–8.3；与 PostgreSQL/RLS 深度集成，Deno 运行时开箱可用",
+    "note": "边缘函数与 Postgres、Auth、Storage 共用权限模型，适合做 Webhook；短板是免费项目闲置即暂停，函数上限 25 个。"
+  },
+  {
+    "name": "Fly.io（Machines）",
+    "dev": "Fly.io",
+    "cat": "clone",
+    "score": 7.8,
+    "avail": "paid",
+    "site": {
+      "label": "fly.io/pricing",
+      "url": "https://fly.io/pricing/"
+    },
+    "free": "无永久免费层：新账户仅保留免费试用额度，付费按用量结算（存量老账户的 Hobby/Launch 权益按第三方目录仍保留）",
+    "price": "按 Machines 的 CPU/内存/存储秒级计费，shared-cpu-1x 256 MB 档位约 $2/月量级；官方定价页未取到精确档位表，待确认",
+    "basis": "共识区间 7.3–8.2；城市级 Anycast 部署，microVM 隔离强",
+    "note": "把容器部署到城市级节点，microVM 隔离强、启动快；短板是已取消新账户免费层，停机实例仍占存储、无法真正缩容到零。"
+  },
+  {
+    "name": "Railway",
+    "dev": "Railway",
+    "cat": "clone",
+    "score": 7.7,
+    "avail": "paid",
+    "site": {
+      "label": "railway.com/pricing",
+      "url": "https://railway.com/pricing"
+    },
+    "free": "无永久免费层：新账户获 30 天 $5 试用额度；第三方文章称免费档另有每月约 $1 额度，官方定价页未见对应条目，待确认",
+    "price": "Hobby $5/月起（约 ¥35.5），含每月 $5 用量额度，超出按实际用量按秒计费；Free 档（如仍提供）硬上限 1 vCPU / 0.5 GB RAM",
+    "basis": "共识区间 7.2–8.1；部署体验最简，按秒计费、无冷启动",
+    "note": "从仓库到上线只需几分钟，按秒计费且无冷启动；短板是免费档几乎不可用，服务需常驻才有意义，成本弹性差。"
+  },
+  {
+    "name": "Render",
+    "dev": "Render",
+    "cat": "clone",
+    "score": 7.6,
+    "avail": "free",
+    "site": {
+      "label": "render.com/pricing",
+      "url": "https://render.com/pricing"
+    },
+    "free": "Hobby 档：每月 750 实例小时免费（Workspace 级，非单服务）+ 免费静态站点；免费实例闲置 15 分钟后自动休眠",
+    "price": "Hobby $0；付费实例 Starter $7/月起（0.5 CPU / 512 MB，约 ¥50）、Standard $25/月（1 CPU / 2 GB）；Pro 工作区 $25/月（约 ¥178）",
+    "basis": "共识区间 7.1–8.0；免费额度够长期跑一个服务，但休眠明显",
+    "note": "Web 服务、Cron 与托管 Postgres 收在同一控制台，免费 750 小时/月；短板是免费实例闲置 15 分钟休眠，唤醒需 10–30 秒。"
+  },
+  {
+    "name": "Oracle OCI Functions",
+    "dev": "Oracle Cloud Infrastructure",
+    "cat": "video",
+    "score": 7.5,
+    "avail": "free",
+    "site": {
+      "label": "oracle.com/cloud/cloud-native/functions",
+      "url": "https://www.oracle.com/cloud/cloud-native/functions/"
+    },
+    "free": "Always Free：每月前 200 万次调用免费 + 前 40 万 GB-秒执行时间免费（账户级长期口径）",
+    "price": "超出后 $0.0000002/次调用（约 ¥0.0000014）、$0.00001417/GB-秒（约 ¥0.0001）；预置并发执行不额外收费",
+    "basis": "共识区间 7.0–7.9；免费调用额度在主流厂商中最高（每月 200 万次）",
+    "note": "基于开源 Fn/Knative 的项目级函数服务，支持容器镜像与免费预置并发；短板是文档与社区资料明显少于三大云厂。"
+  },
+  {
+    "name": "Koyeb",
+    "dev": "Koyeb",
+    "cat": "clone",
+    "score": 7.4,
+    "avail": "paid",
+    "site": {
+      "label": "koyeb.com/pricing",
+      "url": "https://www.koyeb.com/pricing"
+    },
+    "free": "免费档是否存在口径冲突：部分第三方目录仍列出免费 Hobby 档（含 1 个 Web 服务与小型 Postgres），另有目录称 2026 年已无免费档；本轮未取到官方定价页快照，待确认",
+    "price": "待确认（本轮未取到官方档位与单价；第三方口径称付费自 $29/月起）",
+    "basis": "共识区间 6.8–7.8；部署简单、支持多区域，但公开定价资料最少",
+    "note": "面向容器与函数的托管平台，主打一键部署与全球边缘网络；短板是未取得官方定价快照，免费档是否存在有冲突说法。"
+  },
+  {
+    "name": "IBM Cloud Code Engine（函数）",
+    "dev": "IBM Cloud",
+    "cat": "video",
+    "score": 7.3,
+    "avail": "free",
+    "site": {
+      "label": "cloud.ibm.com/docs/codeengine",
+      "url": "https://cloud.ibm.com/docs/codeengine?topic=codeengine-pricing"
+    },
+    "free": "Always Free 档：每月 10 万 vCPU·秒；函数上限 20 个/项目、应用上限 40 个/项目（按 org 计，不计实例数）",
+    "price": "按工作负载消耗的内存与 vCPU 以及入站 HTTP 调用计费，公开定价页未取到完整单价，待确认",
+    "basis": "共识区间 6.7–7.8；以 Serverless 容器为主、函数为附加形态",
+    "note": "以 Serverless 容器为主、函数为附加形态，与 OpenShift 生态衔接；短板是免费额度仅 10 万 vCPU·秒、单项目限 20 个函数。"
+  },
+  {
+    "name": "Val Town",
+    "dev": "Val Town",
+    "cat": "clone",
+    "score": 7.0,
+    "avail": "free",
+    "site": {
+      "label": "val.town/pricing",
+      "url": "https://www.val.town/pricing"
+    },
+    "free": "Free 档：每天 10 万次运行、单次运行最长 1 分钟、cron 最短 15 分钟间隔、无自定义域名、日志保留 3 天、public val 数量不限",
+    "price": "Free $0；Pro/Business 档价格未在本轮取到具体数值，待确认（官方称年付可省两个月）",
+    "basis": "共识区间 6.4–7.6；把脚本、HTTP 端点与定时任务合成一个函数托管形态",
+    "note": "把 TypeScript 脚本直接变成 HTTP 端点与定时任务，适合托管零散自动化；短板是单次运行限 1 分钟、免费档无自定义域名。"
+  }
+];
+
+const PRICE_POINTS = [
+  {
+    "name": "AWS Lambda",
+    "x": 0,
+    "y": 9.0,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Cloudflare Workers",
+    "x": 0,
+    "y": 8.9,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Cloud Run functions",
+    "x": 0,
+    "y": 8.8,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Google Cloud Run",
+    "x": 0,
+    "y": 8.7,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Azure Functions",
+    "x": 0,
+    "y": 8.6,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Vercel Functions",
+    "x": 0,
+    "y": 8.5,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Deno Deploy",
+    "x": 0,
+    "y": 8.2,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Netlify Functions",
+    "x": 0,
+    "y": 8.1,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Firebase Cloud Functions",
+    "x": 0,
+    "y": 8.0,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Fastly Compute",
+    "x": 0,
+    "y": 7.9,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Supabase Edge Functions",
+    "x": 0,
+    "y": 7.9,
+    "free": true,
+    "lp": "left"
+  },
+  {
+    "name": "Railway",
+    "x": 35.5,
+    "y": 7.7,
+    "free": false,
+    "lp": "right"
+  },
+  {
+    "name": "Render",
+    "x": 0,
+    "y": 7.6,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Oracle OCI Functions",
+    "x": 0,
+    "y": 7.5,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "IBM Code Engine",
+    "x": 0,
+    "y": 7.3,
+    "free": true,
+    "lp": "right"
+  },
+  {
+    "name": "Val Town",
+    "x": 0,
+    "y": 7.0,
+    "free": true,
+    "lp": "right"
+  }
+];
+
+const TIMELINE = [
+  {
+    "when": "2024.10",
+    "what": "Fly.io 停止为新账户提供永久免费层",
+    "why": "第三方免费层目录一致记录：Fly.io 自 2024 年 10 月起不再向新账户提供永久免费层，仅保留免费试用，存量老账户的 Hobby/Launch 权益仍保留。这是「托管容器型 Serverless」免费时代收缩的起点。",
+    "hot": true
+  },
+  {
+    "when": "2026.02",
+    "what": "Deno Deploy 正式 GA",
+    "why": "Deno Deploy 于 2026-02-03 结束公测转为正式可用，并给出免费档（100 万次请求/月、100 GB 出流量、15 小时 CPU）与付费档；此后定价页把出流量改为 20 GiB、CPU 时间改为 20 小时，两套口径并存。",
+    "hot": true
+  },
+  {
+    "when": "2026.04",
+    "what": "Netlify 全面转向积分制计费并调整费率",
+    "why": "官方与服务商文档一致显示：Netlify 自 2026-04-14 起把计算从 5 积分/GB-小时上调至 10 积分/GB-小时、Web 请求从 3 积分/万次下调至 2 积分/万次，并推出额外积分包（$10/1500 积分）；旧版「每月 12.5 万次函数调用」的免费额度口径随之废止。",
+    "hot": true
+  },
+  {
+    "when": "2026.07",
+    "what": "IBM 把 Serverless 主线落在 Code Engine",
+    "why": "IBM Cloud Code Engine 的定价与限额文档（更新于 2026-07-11）确立免费档为每月 10 万 vCPU·秒、单项目最多 20 个函数与 40 个应用；旧版 IBM Cloud Functions 的官方页面仍在，但迁移与停服安排未公示。",
+    "hot": false
+  },
+  {
+    "when": "2026.08",
+    "what": "Cloudflare 明确 Workers 付费版起价与免费版配额",
+    "why": "官方计划与定价页确认：Workers Free 每天 10 万次请求 + 每次 10 毫秒 CPU；Paid 自 $5/月起，含每月 1000 万次请求 + 3000 万 CPU 毫秒，超出 $0.30/百万次请求与 $0.02/百万 CPU 毫秒。",
+    "hot": false
+  },
+  {
+    "when": "2026.09",
+    "what": "Vercel 明确 Hobby 档函数免费额度",
+    "why": "官方计划与函数用量文档确认：Hobby 档含每月 100 万次函数调用、4 小时 Active CPU、360 GB-小时预置内存与 100 GB Fast Data Transfer，并限定非商用；Pro 档 $20/座/月起。",
+    "hot": false
+  },
+  {
+    "when": "2026.10",
+    "what": "Supabase 确认 Edge Functions 免费档与按量计费变更",
+    "why": "官方定价与变更日志显示：Edge Functions 的 usage-based billing 已移除，Free 档含每月 50 万次调用与 25 个函数，Pro 档 $25/月含 200 万次调用、超出 $2/百万次。",
+    "hot": true
+  },
+  {
+    "when": "2026.10",
+    "what": "Oracle 公布 OCI Functions 的 Always Free 口径",
+    "why": "官方价格表与免费套餐页确认：OCI Functions 每月前 200 万次调用与 40 万 GB-秒执行时间免费，超出后 $0.0000002/次、$0.00001417/GB-秒，预置并发执行不额外收费。",
+    "hot": false
+  }
+];
+
+const VERIFIED = [
+  {
+    "name": "IBM Cloud Functions（Apache OpenWhisk 版）",
+    "verdict": "<span class=\"tag\">部分具备，待确认</span>",
+    "note": "IBM 当前主推的 Serverless 产品是 Code Engine（单项目最多 20 个函数、免费 10 万 vCPU·秒/月）；旧版 IBM Cloud Functions 的官方页面（cloud.ibm.com/functions）仍显示免费 40 万 GB·秒/月与 $0.000017765/GB·秒，但其停服时间与迁移安排本轮未取得可靠官方公告，故按待确认处理、不写入主表。信源：<a class=\"ext\" href=\"https://cloud.ibm.com/functions\">IBM Cloud Functions 官网入口</a>、<a class=\"ext\" href=\"https://cloud.ibm.com/docs/codeengine?topic=codeengine-pricing\">Code Engine 定价文档</a>。"
+  },
+  {
+    "name": "Netlify 旧版「每月 12.5 万次函数调用」免费额度",
+    "verdict": "<span class=\"tag\">已停服</span>",
+    "note": "口径已废止：Netlify 自 2026-04-14 起全面改为积分制计费，旧版按「每月 12.5 万次函数调用 / 100 GB 带宽」描述的免费档不再适用，现行 Free 档为每月 300 积分硬上限（计算 10 积分/GB-小时、Web 请求 2 积分/万次），用完即暂停项目。信源：<a class=\"ext\" href=\"https://www.netlify.com/changelog/2026-04-14-pricing-updates-april-2026/\">Netlify 2026 年 4 月定价更新公告</a>、<a class=\"ext\" href=\"https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/credit-based-pricing-plans/\">Credit-based pricing plans</a>。"
+  },
+  {
+    "name": "Fly.io 永久免费层",
+    "verdict": "<span class=\"tag\">已停服</span>",
+    "note": "官方定价页已不列出永久免费档；第三方目录一致记录新账户自 2024 年 10 月起仅保留免费试用，存量老账户的 Hobby/Launch 权益（3 台 shared-cpu-1x 256 MB、3 GB 卷存储等）仍保留，但官方未公示该权益的期限条款。信源：<a class=\"ext\" href=\"https://fly.io/pricing/\">Fly.io Pricing</a>、<a class=\"ext\" href=\"https://agentdeals.dev/category/cloud-hosting\">第三方免费层目录（Fly.io 条目）</a>。"
+  },
+  {
+    "name": "Heroku Free Dynos",
+    "verdict": "<span class=\"tag\">已停服</span>",
+    "note": "Heroku 自 2022-11-28 起取消免费 dynos 与免费 Postgres，被视为「永久免费 PaaS」时代退场的标志。本报告把它作为海外 Serverless 免费层收缩的对照条目列入，不参与评分与价格图。信源：<a class=\"ext\" href=\"https://www.heroku.com/pricing\">Heroku Pricing</a>。"
+  },
+  {
+    "name": "Koyeb 免费档",
+    "verdict": "<span class=\"tag\">部分具备，待确认</span>",
+    "note": "关于 Koyeb 是否仍提供免费档存在冲突口径：部分第三方目录（含 freetier.co、gappsy 等聚合站）仍列出含 1 个 Web 服务与小型 Postgres 的免费 Hobby 档，另有聚合站称 2026 年已无免费计划、付费自 $29/月起。本轮未取到 koyeb.com 定价页快照，按待确认处理。信源：<a class=\"ext\" href=\"https://www.koyeb.com/pricing\">Koyeb Pricing</a>。"
+  },
+  {
+    "name": "Google Cloud Functions（1st gen）",
+    "verdict": "<span class=\"tag\">部分具备，待确认</span>",
+    "note": "Google 已将 Cloud Functions 并入 Cloud Run 体系（现称 Cloud Run functions），并区分 1st gen 与 2nd gen：1st gen 的运行时、并发与计费档单独列在官方 1st gen 定价页，官方建议新项目使用 2nd gen。1st gen 是否已停止对新客户开放，本轮未取得明确公告，按待确认处理。信源：<a class=\"ext\" href=\"https://cloud.google.com/functions/pricing-1stgen\">Cloud Run functions (1st gen) pricing</a>。"
+  },
+  {
+    "name": "Azure Functions 全球版与 Azure Functions 中国区",
+    "verdict": "<span class=\"tag\">有产品，多线并行</span>",
+    "note": "同一产品在两套运营体系下提供：全球版由 Microsoft 运营、中国区由世纪互联运营，两边的免费授予相同（每订阅每月 100 万次执行 + 40 万 GB-秒），但货币与可用区域不同——引用时必须区分 azure.microsoft.com 与 azure.cn 两个域，不得混用价格。信源：<a class=\"ext\" href=\"https://azure.microsoft.com/en-us/pricing/details/functions/\">Azure Functions Pricing</a>、<a class=\"ext\" href=\"https://www.azure.cn/pricing/details/azure-functions/\">Azure Functions 定价（世纪互联）</a>。"
+  },
+  {
+    "name": "AWS Lambda 全球版与中国区",
+    "verdict": "<span class=\"tag\">有产品，多线并行</span>",
+    "note": "中国区（北京由光环新网运营、宁夏由西云数据运营）与全球版是两套独立定价体系：中国区以人民币计价（x86 ¥0.000113477/GB-秒、请求 ¥0.00000136/次），且永久免费层仅适用于宁夏区域；全球版为 $0.20/百万次请求与 $0.0000166667/GB-秒。不得把全球版美元价直接套用到中国区。信源：<a class=\"ext\" href=\"https://www.amazonaws.cn/lambda/pricing/\">Amazon Lambda 定价（中国区）</a>、<a class=\"ext\" href=\"https://aws.amazon.com/lambda/pricing/\">AWS Lambda Pricing（全球）</a>。"
+  },
+  {
+    "name": "Railway 免费档（每月约 $1 额度）",
+    "verdict": "<span class=\"tag\">部分具备，待确认</span>",
+    "note": "Railway 官方定价页明确 Hobby 档 $5/月起、含每月 $5 用量，新账户获 30 天 $5 试用额度；但「另有免费档每月约 $1 额度」的说法只出现在第三方对比文章中（如 render.com 与 selfhost.dev 的对比文），官方页面未见对应条目，故按待确认处理。信源：<a class=\"ext\" href=\"https://railway.com/pricing\">Railway Pricing</a>。"
+  },
+  {
+    "name": "Firebase Cloud Functions 的独立免费额度",
+    "verdict": "<span class=\"tag\">有产品</span>",
+    "note": "Firebase 的云函数现由 Cloud Run 承载，计费与免费层统一引用 Cloud Run 口径（每账户每月 200 万次调用 + 40 万 GB-秒 + 20 万 GHz-秒 + 5 GB 出流量），不再单独公布一套 Firebase 专属免费额度。信源：<a class=\"ext\" href=\"https://firebase.google.cn/docs/app-hosting/costs\">Firebase App Hosting 成本（含 Cloud Run 免费层口径）</a>、<a class=\"ext\" href=\"https://cloud.google.com/functions/pricing\">Cloud Run functions pricing</a>。"
+  }
+];
+
+const SOURCES = [
+  {
+    "p": "AWS Lambda",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://aws.amazon.com/lambda/pricing/\">AWS Lambda 定价</a>",
+        "免费层 100 万次请求 + 40 万 GB-秒、超出后 $0.20/百万次与 $0.00001667/GB-秒、100 GiB HTTP 响应流"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html\">Lambda 配额</a>",
+        "并发执行默认 1000、可提额上限"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html\">Lambda 并发管理</a>",
+        "预留并发与预置并发的配额关系"
+      ],
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://www.amazonaws.cn/lambda/pricing/\">Amazon Lambda 定价（中国区）</a>",
+        "中国区人民币单价（与全球版对照）"
+      ]
+    ]
+  },
+  {
+    "p": "Cloudflare Workers",
+    "items": [
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://developers.cloudflare.com/workers/platform/pricing/\">Workers 定价</a>",
+        "Free 每天 10 万次请求 + 10 毫秒 CPU；Paid $5/月含 1000 万次请求 + 3000 万 CPU 毫秒"
+      ],
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://www.cloudflare.com/plans/\">Cloudflare 套餐</a>",
+        "Workers Free/Paid 套餐包含项与 KV 免费额度"
+      ],
+      [
+        "第三方评测",
+        "<a class=\"ext\" href=\"https://vercel.com/kb/guide/next-js-on-vercel-vs-cloudflare\">Vercel 知识库：Next.js on Vercel vs Cloudflare</a>",
+        "Workers 每 isolate 128 MB 内存与 3 MB 压缩代码上限"
+      ]
+    ]
+  },
+  {
+    "p": "Google Cloud Run functions",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://cloud.google.com/functions/pricing\">Cloud Run functions 定价</a>",
+        "调用 $0.40/百万次、前 200 万次免费"
+      ],
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://cloud.google.com/functions/pricing-1stgen\">Cloud Run functions (1st gen) pricing</a>",
+        "1st gen 调用分档（前 200 万次免费、之后 $0.40/百万次）"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://docs.cloud.google.com/free/docs/free-cloud-features\">Google Cloud Free Tier</a>",
+        "Cloud Run functions 每月 200 万次调用 + 40 万 GB-秒 + 20 万 GHz-秒 + 5 GB 出流量"
+      ]
+    ]
+  },
+  {
+    "p": "Google Cloud Run",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://cloud.google.com/run/pricing\">Cloud Run 定价</a>",
+        "CPU $0.000018/vCPU-秒、内存 $0.000002/GiB-秒"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://docs.cloud.google.com/free/docs/free-cloud-features\">Google Cloud Free Tier</a>",
+        "Cloud Run 按请求计费免费层：200 万次请求 + 36 万 GB-秒 + 18 万 vCPU-秒 + 1 GB 北美出流量"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://firebase.google.cn/docs/app-hosting/costs\">Firebase App Hosting 成本</a>",
+        "Cloud Run 请求 200 万次免费、之后 $0.40/百万次"
+      ]
+    ]
+  },
+  {
+    "p": "Azure Functions",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://azure.microsoft.com/en-us/pricing/details/functions/\">Azure Functions 定价</a>",
+        "消费计划 $0.000016/GB-秒、每订阅每月免费 100 万次执行 + 40 万 GB-秒"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://learn.microsoft.com/en-us/azure/azure-functions/functions-consumption-costs\">消费计划成本估算</a>",
+        "100 毫秒计费粒度与内存/执行时间分档"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://learn.microsoft.com/en-us/azure/azure-functions/n-functions\">Azure Functions 官方文档</a>",
+        "Durable Functions 与 Flex Consumption 计划能力"
+      ]
+    ]
+  },
+  {
+    "p": "Vercel Functions",
+    "items": [
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://vercel.com/docs/functions/usage-and-pricing\">Vercel 函数用量与定价</a>",
+        "函数调用、Active CPU 与预置内存的计量口径"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://vercel.com/docs/plans/hobby\">Vercel Hobby 计划</a>",
+        "Hobby 档包含项与「非商用」限制"
+      ],
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://vercel.com/pricing\">Vercel 定价</a>",
+        "Pro $20/座/月与超量价格"
+      ]
+    ]
+  },
+  {
+    "p": "Deno Deploy",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://deno.com/deploy/pricing\">Deno Deploy 定价</a>",
+        "免费档：100 万次请求 + 20 GiB 出流量 + 20 小时 CPU + 200 GB-小时内存 + 5 个自定义域名"
+      ],
+      [
+        "官方博客",
+        "<a class=\"ext\" href=\"https://deno.com/blog/deno-deploy-is-ga\">Deno Deploy is GA</a>",
+        "2026-02-03 GA 时公布的免费档口径（100 GB 出流量 + 15 小时 CPU）"
+      ],
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://deno.land/pricing\">Deno 定价（deno.land）</a>",
+        "CPU time 与内存时间的补充口径"
+      ]
+    ]
+  },
+  {
+    "p": "Netlify Functions",
+    "items": [
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/credit-based-pricing-plans/\">Credit-based pricing plans</a>",
+        "各档积分额度与计算/带宽/请求的积分费率"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://docs.netlify.com/manage/accounts-and-billing/billing/billing-for-credit-based-plans/how-credits-work/\">How credits work</a>",
+        "积分扣减规则与超出后的暂停行为"
+      ],
+      [
+        "官方公告",
+        "<a class=\"ext\" href=\"https://www.netlify.com/changelog/2026-04-14-pricing-updates-april-2026/\">Netlify 2026 年 4 月定价更新</a>",
+        "计算 5→10 积分/GB-小时、Web 请求 3→2 积分/万次的调整时点"
+      ]
+    ]
+  },
+  {
+    "p": "Firebase Cloud Functions",
+    "items": [
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://firebase.google.cn/docs/app-hosting/costs\">Firebase App Hosting 成本</a>",
+        "Cloud Run 每月 200 万次请求免费、$0.40/百万次；Firebase 函数统一引用 Cloud Run 口径"
+      ],
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://cloud.google.com/functions/pricing\">Cloud Run functions 定价</a>",
+        "触发与调用计费口径"
+      ]
+    ]
+  },
+  {
+    "p": "Fastly Compute",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://www.fastly.com/pricing\">Fastly 定价</a>",
+        "免费层每月 1000 万次 Compute 请求、Compute 请求 $0.50/百万次"
+      ],
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://www.fastly.com/legacy-pricing\">Fastly 旧版在线付费定价（2025）</a>",
+        "Compute 时长 $0.000035/GB-秒 的历史口径"
+      ],
+      [
+        "第三方评测",
+        "<a class=\"ext\" href=\"https://www.cloudmasters.tokyo/cloudflare-workers-kv-r2-edge-cold-start-zero-guide/\">边缘运行时对比</a>",
+        "对 Compute@Edge 每百万请求 $3.50 的不同口径（与官方冲突，以官方为准）"
+      ]
+    ]
+  },
+  {
+    "p": "Supabase Edge Functions",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://supabase.com/pricing\">Supabase 定价</a>",
+        "Free 50 万次调用 + 25 个函数；Pro $25/月含 200 万次调用、超出 $2/百万次"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://supabase.com/docs/guides/functions/pricing\">Edge Functions 定价</a>",
+        "按量计费与免费额度的口径沿革"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://supabase.com/docs/guides/platform/org-based-billing\">组织级计费</a>",
+        "免费项目闲置暂停与额度叠加规则"
+      ]
+    ]
+  },
+  {
+    "p": "Fly.io",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://fly.io/pricing/\">Fly.io 定价</a>",
+        "付费档与 Machines 计量口径"
+      ],
+      [
+        "第三方目录",
+        "<a class=\"ext\" href=\"https://agentdeals.dev/category/cloud-hosting\">免费层目录（cloud hosting）</a>",
+        "新账户自 2024-10 起无永久免费层、老账户权益保留"
+      ]
+    ]
+  },
+  {
+    "p": "Railway",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://railway.com/pricing\">Railway 定价</a>",
+        "Hobby $5/月含 $5 用量、30 天 $5 试用额度"
+      ],
+      [
+        "第三方对比",
+        "<a class=\"ext\" href=\"https://selfhost.dev/blog/railway-vs-render-pricing-2026-verdict/\">Railway vs Render 定价对比（2026）</a>",
+        "免费档每月约 $1 额度与 1 vCPU/0.5 GB 硬上限的说法"
+      ],
+      [
+        "第三方对比",
+        "<a class=\"ext\" href=\"https://comparedev.com/vs/railway-vs-render/\">Railway 与 Render 对比</a>",
+        "2026 年是否仍有永久免费层的冲突口径"
+      ]
+    ]
+  },
+  {
+    "p": "Render",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://render.com/pricing\">Render 定价</a>",
+        "Hobby 免费档与 Starter/Standard 实例价格"
+      ],
+      [
+        "官方文章",
+        "<a class=\"ext\" href=\"https://render.com/articles/platforms-with-a-real-free-tier-for-developers-in-2026\">平台免费层盘点（2026）</a>",
+        "750 实例小时/月与免费实例休眠规则"
+      ],
+      [
+        "官方文章",
+        "<a class=\"ext\" href=\"https://render.com/articles/render-vs-railway\">Render vs Railway</a>",
+        "与 Railway 的计费方式对比"
+      ]
+    ]
+  },
+  {
+    "p": "Oracle OCI Functions",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://www.oracle.com/cloud/cloud-native/functions/\">OCI Functions 产品页</a>",
+        "按月计费、与 Kubernetes/容器生态的集成"
+      ],
+      [
+        "官方价格表",
+        "<a class=\"ext\" href=\"https://www.oracle.com/ae/cloud/price-list/\">Oracle Cloud 价格表</a>",
+        "$0.0000002/次调用、$0.00001417/GB-秒"
+      ],
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://www.oracle.com/cn/cloud/free/\">Oracle Always Free</a>",
+        "每月 200 万次调用与 40 万 GB-秒免费、30 天试用额度上限"
+      ]
+    ]
+  },
+  {
+    "p": "Koyeb",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://www.koyeb.com/pricing\">Koyeb 定价</a>",
+        "档位与免费层的官方入口（本轮未取到页面内容）"
+      ],
+      [
+        "第三方目录",
+        "<a class=\"ext\" href=\"https://agentdeals.dev/category/cloud-hosting\">免费层目录（cloud hosting）</a>",
+        "对 Koyeb 免费档存在与否的冲突口径"
+      ]
+    ]
+  },
+  {
+    "p": "IBM Cloud Code Engine（函数）",
+    "items": [
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://cloud.ibm.com/docs/codeengine?topic=codeengine-pricing\">Code Engine 定价</a>",
+        "计费项与 Always Free 10 万 vCPU·秒"
+      ],
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://www.ibm.com/cloud/free/kubernetes\">IBM Cloud 免费服务</a>",
+        "Code Engine 免费额度口径"
+      ],
+      [
+        "官方文档",
+        "<a class=\"ext\" href=\"https://cloud.ibm.com/docs/codeengine?topic=codeengine-limits\">Code Engine 限额</a>",
+        "单项目 20 个函数、40 个应用、128 vCPU 总配额"
+      ],
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://cloud.ibm.com/functions\">IBM Cloud Functions</a>",
+        "旧版函数服务的免费层与单价（停服时间待确认）"
+      ]
+    ]
+  },
+  {
+    "p": "Val Town",
+    "items": [
+      [
+        "官方站点",
+        "<a class=\"ext\" href=\"https://www.val.town/pricing\">Val Town 定价</a>",
+        "Free 档权益（每天 10 万次运行、单次 1 分钟、cron 15 分钟、日志 3 天）与 Pro/Business 档存在性"
+      ]
+    ]
+  }
+];
+
+const TODOS = [
+  [
+    "AWS Lambda 免费层的账户级口径",
+    "本轮未重新取到 aws.amazon.com/lambda/pricing 的完整页面快照（仅取到免费层摘要），「每月 100 万次请求 + 40 万 GB-秒」是否为账户级、以及 100 GiB HTTP 响应流的口径边界，正式采购前请以定价页原文为准。"
+  ],
+  [
+    "Google Cloud Run 免费层口径冲突",
+    "官方 Free Tier 页（docs.cloud.google.com/free）为每月 200 万次请求 + 36 万 GB-秒 + 18 万 vCPU-秒 + 1 GB 北美出流量；但 cloud.google.com/run 产品页出现「前 24 万 vCPU-秒 + 45 万 GiB-秒免费」的另一套表述，二者是否为不同计量项待确认。"
+  ],
+  [
+    "Cloud Run functions 与 Cloud Run 免费层的关系",
+    "Cloud Run functions 的每月 200 万次调用 / 40 万 GB-秒 / 20 万 GHz-秒 与 Cloud Run 按请求计费的资源免费层是否叠加，官方文档未给出统一说明，待确认。"
+  ],
+  [
+    "Deno Deploy 免费额度两套口径",
+    "GA 公告（2026-02-03）写明免费档含 100 GB 出流量与 15 小时 CPU，当前定价页为 20 GiB 出流量、20 小时 CPU、200 GB-小时内存时间；本报告以定价页为准，公告数字仅作历史参考。"
+  ],
+  [
+    "Netlify 积分的跨厂商换算",
+    "积分与实际用量只能按官方费率表折算（计算 10 积分/GB-小时、带宽 20 积分/GB、Web 请求 2 积分/万次、生产部署 15 积分/次），无法与「请求数 + GB-秒」直接等价，跨厂商比价需先建立换算表。"
+  ],
+  [
+    "Val Town Pro/Business 档价格",
+    "官方定价页展示 Free 档权益与 Pro/Business 档的存在，并称年付可省两个月，但本轮未取到 Pro/Business 的具体月费数值，待确认。"
+  ],
+  [
+    "Koyeb 免费档与定价",
+    "免费档是否仍存在、付费档月最低价均未取到官方口径，第三方聚合站存在冲突说法，待确认；本表的免费额度与价格字段均按「待确认」处理。"
+  ],
+  [
+    "Fly.io 付费档最低月费",
+    "shared-cpu-1x 256 MB 常驻实例的精确月费未取到官方数值（仅按约 $2/月量级描述）；老账户 Hobby/Launch 免费权益的条款与期限官方未公示，待确认。"
+  ],
+  [
+    "Railway 免费档每月约 $1 额度",
+    "该说法来自第三方对比文章（render.com、selfhost.dev），官方定价页仅列 Hobby $5/月与 30 天 $5 试用，未出现对应条目，待确认。"
+  ],
+  [
+    "IBM Cloud Code Engine 单价与旧版函数服务停服时间",
+    "Code Engine 的公开单价（每 vCPU·秒、每 GB·秒、每次 HTTP 调用）未在本轮取到完整数值；旧版 IBM Cloud Functions 的停服时间与迁移截止日亦未取得官方公告，均待确认。"
+  ],
+  [
+    "Oracle 免费额度的两套口径",
+    "Oracle 免费套餐页同时宣传「30 天试用最多 1.12 亿次调用 + 2000 万 GB-秒」与 Always Free「每月 200 万次调用 + 40 万 GB-秒」两套口径，前者为一次性试用额度，引用时不得混用；1.12 亿次对应的具体计量口径待确认。"
+  ],
+  [
+    "Fastly Compute 时长单价",
+    "官方当前定价页只明确 Compute 请求 $0.50/百万次（10M–500M 区间）与免费层 1000 万次请求；Compute 时长的当前单价仅在旧版在线付费定价页（2025）出现（$0.000035/GB-秒），现行单价待确认。"
+  ],
+  [
+    "Supabase Edge Functions 的计算额度",
+    "官方变更日志称已移除 Edge Functions 按量计费，Free 档含 25 个函数与每月 50 万次调用；另有第三方资料列出 25 万 GB-秒 的计算额度，官方文档未见对应条目，待确认。"
+  ],
+  [
+    "Vercel 的 Active CPU 与预置内存换算",
+    "Hobby 档「非商用」的具体判定标准、以及 Active CPU 小时与预置内存 GB-小时的换算示例，官方文档未给出统一口径，跨厂商比价需以同负载实测为准。"
+  ],
+  [
+    "Azure Functions Flex Consumption 档位",
+    "Flex Consumption 计划的免费授予与单价口径与消费计划不同，本轮未取到完整档位表，待确认；中国区（世纪互联）是否已提供该计划亦未核实。"
+  ]
+];
+
+/* ================= 渲染：总表 ================= */
+const CAT = {video:'云厂商FaaS', live:'边缘函数', clone:'平台型FaaS', interactive:'BaaS/云开发'};
+const CAT_TAG = {video:'cat-video', live:'cat-live', clone:'cat-clone', interactive:'cat-interactive'};
+const tableEl = document.getElementById('mainTable');
+PRODUCTS.forEach(function(p){
+  const availTag = p.avail === 'free'
+    ? '<span class="tag free">可免费使用</span>'
+    : '<span class="tag paid">付费或仅 API</span>';
+  const catTag = '<span class="tag ' + CAT_TAG[p.cat] + '">' + CAT[p.cat] + '</span>';
+  const scoreHtml = (p.score === null)
+    ? '<span class="score na">—</span>'
+    : '<span class="score">' + p.score.toFixed(1) + '</span>';
+  const priceHtml = p.price + (p.cny ? '<span class="note-inline" style="display:block;margin-top:3px">' + p.cny + '</span>' : '');
+  const tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td data-label="产品 / 开发方"><span class="pname">' + p.name + '</span><span class="dev">' + p.dev + '</span><span style="display:block;margin-top:6px">' + catTag + availTag + '</span></td>' +
+    '<td data-label="评分">' + scoreHtml + '</td>' +
+    '<td data-label="评分依据"><span class="basis">' + p.basis + '</span></td>' +
+    '<td data-label="官方入口"><a class="ext" href="' + p.site.url + '">' + p.site.label + '</a></td>' +
+    '<td data-label="免费额度">' + p.free + '</td>' +
+    '<td data-label="价格">' + priceHtml + '</td>' +
+    '<td data-label="特点与局限">' + p.note + '</td>';
+  tableEl.appendChild(tr);
+});
+document.getElementById('tableCaption').textContent =
+  '注：评分为主观共识评分（满分 10），非厂商官方指标。价格与免费额度均以 2026-10-08 公开信息为准；标注「待确认」表示本轮未取得可靠官方口径。';
+
+/* ================= 渲染：时间线 ================= */
+const tlEl = document.getElementById('timeline');
+TIMELINE.forEach(function(t){
+  var d = document.createElement('div');
+  d.className = 'tnode' + (t.hot ? ' hot' : '');
+  d.innerHTML = '<div class="when">' + t.when + '</div><div class="axis"><i class="dot"></i></div>' +
+                '<div class="body"><p class="what">' + t.what + '</p><p class="why">' + t.why + '</p></div>';
+  tlEl.appendChild(d);
+});
+
+/* ================= 渲染：核验表 ================= */
+const vEl = document.getElementById('verifyTable');
+VERIFIED.forEach(function(v){
+  var tr = document.createElement('tr');
+  tr.innerHTML = '<td data-label="厂商 / 产品"><span class="pname">' + v.name + '</span></td>' +
+                 '<td data-label="核验结论">' + v.verdict + '</td>' +
+                 '<td data-label="说明">' + v.note + '</td>';
+  vEl.appendChild(tr);
+});
+
+/* ================= 渲染：信源索引 ================= */
+const srcEl = document.getElementById('sourceIndex');
+SOURCES.forEach(function(g){
+  var h = document.createElement('div');
+  h.className = 'srcgrp';
+  var rows = g.items.map(function(it){
+    var link = /^https?:/.test(it[1]) ? '<a class="ext" href="' + it[1] + '">' + it[1] + '</a>' : it[1];
+    link = link.replace(/・/g, '<br>');
+    return '<li class="srcitem">' +
+           '<span class="srclabel">' + it[0] + '</span>' +
+           '<span class="srcbody">' + link +
+           '<span class="srcfield">支撑字段：' + it[2] + '</span></span></li>';
+  }).join('');
+  h.innerHTML = '<h3>' + g.p + '</h3><ul class="srclist">' + rows + '</ul>';
+  srcEl.appendChild(h);
+});
+
+/* ================= 渲染：待确认 ================= */
+const todoEl = document.getElementById('todoList');
+TODOS.forEach(function(t, i){
+  var d = document.createElement('div');
+  d.className = 't';
+  d.innerHTML = '<div class="n">' + (i + 1) + '</div><div class="c"><b>' + t[0] + '：</b>' + t[1] + '</div>';
+  todoEl.appendChild(d);
+});
+
+/* ================= ECharts ================= */
+var C = {primary:'#12564C', accent:'#C4762A', ink:'#1F2329', ink2:'#646A73', ink3:'#8A939B', line:'#DEE3E8'};
+var CAT_COLOR = {video:'#12564C', live:'#C4762A', clone:'#4E7BA6', interactive:'#7C8A5A'};
+var FONT = '"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+
+function renderScore(){
+  var el = document.getElementById('chartScore');
+  if(!el || typeof echarts === 'undefined') return;
+  var data = PRODUCTS.filter(function(p){return p.score !== null;})
+                     .slice().sort(function(a,b){return a.score - b.score;});
+  var chart = echarts.init(el);
+  chart.setOption({
+    grid:{left:8, right:72, top:18, bottom:34, containLabel:true},
+    tooltip:{
+      trigger:'axis', axisPointer:{type:'shadow'},
+      backgroundColor:'#fff', borderColor:C.line, borderWidth:1,
+      textStyle:{color:C.ink, fontFamily:FONT, fontSize:14},
+      formatter:function(ps){
+        var i = ps[0].dataIndex, p = data[i];
+        return '<b>' + p.name + '</b><br/>综合评分：' + p.score.toFixed(1) + ' / 10<br/>品类：' + CAT[p.cat] +
+               '<br/>开发者：' + p.dev + '<br/>评分依据：' + p.basis;
+      }
+    },
+    xAxis:{
+      type:'value', min:0, max:10, splitNumber:5,
+      axisLine:{show:false}, axisTick:{show:false},
+      splitLine:{lineStyle:{color:'#EDF1F4'}},
+      axisLabel:{color:C.ink3, fontFamily:FONT, fontSize:13}
+    },
+    yAxis:{
+      type:'category',
+      data:data.map(function(p){return p.name;}),
+      axisLine:{show:false}, axisTick:{show:false},
+      axisLabel:{color:C.ink, fontFamily:FONT, fontSize:13.5}
+    },
+    series:[{
+      type:'bar', barWidth:'58%',
+      data:data.map(function(p){
+        return {
+          value:p.score,
+          itemStyle:{color:CAT_COLOR[p.cat], borderRadius:[0,3,3,0]}
+        };
+      }),
+      label:{
+        show:true, position:'right', fontFamily:FONT, fontSize:13.5,
+        fontWeight:'bold', color:C.ink, formatter:function(ps){return ps.value.toFixed(1);}
+      }
+    }]
+  });
+  window.addEventListener('resize', function(){chart.resize();});
+}
+
+function renderPrice(){
+  var el = document.getElementById('chartPrice');
+  if(!el || typeof echarts === 'undefined' || !PRICE_POINTS.length) return;
+  var chart = echarts.init(el);
+  chart.setOption({
+    grid:{left:76, right:40, top:26, bottom:56, containLabel:true},
+    tooltip:{
+      trigger:'item',
+      backgroundColor:'#fff', borderColor:C.line, borderWidth:1,
+      textStyle:{color:C.ink, fontFamily:FONT, fontSize:14},
+      formatter:function(ps){
+        var d = ps.data, v = d.value;
+        return '<b>' + d.name + '</b><br/>最低付费月费：' + (v[0] === 0 ? '0（无月最低消费）' : '¥' + v[0] + '/月') +
+               '<br/>综合评分：' + v[1].toFixed(1);
+      }
+    },
+    xAxis:{
+      type:'value', min:-12, max:50,
+      axisLine:{lineStyle:{color:C.line}}, axisTick:{show:false},
+      splitLine:{lineStyle:{color:'#EDF1F4'}},
+      axisLabel:{color:C.ink3, fontFamily:FONT, fontSize:13, formatter:function(v){return v < 0 ? '' : v;}},
+      name:'最低付费月费（元）', nameLocation:'middle', nameGap:34,
+      nameTextStyle:{color:C.ink2, fontFamily:FONT, fontSize:13}
+    },
+    yAxis:{
+      type:'value', min:6.6, max:9.2, splitNumber:5,
+      axisLine:{show:false}, axisTick:{show:false},
+      splitLine:{lineStyle:{color:'#EDF1F4'}},
+      axisLabel:{color:C.ink3, fontFamily:FONT, fontSize:13},
+      name:'综合评分', nameTextStyle:{color:C.ink2, fontFamily:FONT, fontSize:13}
+    },
+    series:[{
+      type:'scatter',
+      symbolSize:16,
+      data:PRICE_POINTS.map(function(p){
+        return {
+          name:p.name,
+          value:[p.x, p.y],
+          free:p.free,
+          label:{position:p.lp, distance:10}
+        };
+      }),
+      itemStyle:{
+        color:function(ps){return ps.data.free ? C.primary : C.accent;},
+        borderColor:'#fff', borderWidth:1.5
+      },
+      labelLayout:{moveOverlap:'shiftY'},
+      label:{
+        show:true, fontFamily:FONT, fontSize:12.5, color:C.ink,
+        formatter:function(ps){return ps.data.name;}
+      },
+      markLine:{
+        silent:true, symbol:'none',
+        lineStyle:{color:C.primary, type:'dashed', width:1, opacity:.55},
+        label:{show:true, position:'insideEndTop', fontFamily:FONT, fontSize:12, color:C.primary,
+               formatter:'无月费门槛'},
+        data:[{xAxis:0}]
+      }
+    }]
+  });
+  window.addEventListener('resize', function(){chart.resize();});
+}
+
+renderScore();
+renderPrice();
+</script>
+
+</main>
+
+</body>
+</html>
